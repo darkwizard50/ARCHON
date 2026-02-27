@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archon Assurance | Precision. Rigor. Perfection.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #111111;
+            --primary: #e0e0e0;
+            --accent: #a5a5a5; 
+            --border: #222222;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            letter-spacing: 0.6rem;
+            margin-bottom: 0;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            letter-spacing: 0.4rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-top: 1rem;
+        }
+
+        /* Content Sections */
+        section {
+            width: 100%;
+            max-width: 800px;
+            padding: 100px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .mandate-text {
+            font-size: 1.2rem;
+            color: var(--accent);
+            text-align: justify;
+            border-left: 2px solid var(--accent);
+            padding-left: 30px;
+        }
+
+        /* Bullet Points Section */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        li span.label {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--primary);
+            width: 30%;
+        }
+
+        li span.desc {
+            font-size: 0.95rem;
+            color: var(--accent);
+            width: 65%;
+        }
+
+        /* Contact Section */
+        .contact-info {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            margin-bottom: 15px;
+        }
+
+        .contact-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            color: var(--accent);
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        footer {
+            padding: 60px 20px;
+            font-size: 0.7rem;
+            letter-spacing: 0.1rem;
+            color: #444;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Archon Assurance</h1>
+        <div class="tagline">Precision. Rigor. Perfection.</div>
+    </header>
+
+    <section id="mandate">
+        <h2>The Mandate</h2>
+        <div class="mandate-text">
+            To provide institutional-grade financial oversight through the lens of absolute accuracy. We do not offer opinions; we deliver verified certainty. Archon Assurance exists to bridge the gap between complex data and actionable truth.
+        </div>
+    </section>
+
+    <section id="capabilities">
+        <h2>Capabilities</h2>
+        <ul>
+            <li>
+                <span class="label">Precision</span>
+                <span class="desc">Forensic-level auditing, detailed tax compliance, and mathematical verification of complex assets.</span>
+            </li>
+            <li>
+                <span class="label">Rigor</span>
+                <span class="desc">Systematic risk assessment, regulatory shielding, and disciplined internal control frameworks.</span>
+            </li>
+            <li>
+                <span class="label">Perfection</span>
+                <span class="desc">Final-form reporting for executive boards, stakeholders, and high-net-worth oversight.</span>
+            </li>
+        </ul>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <span class="contact-label">Electronic Mail</span>
+                <span>office@archonassurance.com</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Location</span>
+                <span>Global Operations | Secured Digital Infrastructure</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        Established 2026 &copy; Archon Assurance / All Data Proprietary.
+    </footer>
+
+</body>
+</html>
