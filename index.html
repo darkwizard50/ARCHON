@@ -10,7 +10,6 @@
 <style>
 :root {
     --bg: #0a0a0a;
-    --surface: #111111;
     --primary: #e0e0e0;
     --accent: #a5a5a5; 
     --border: #222222;
@@ -54,10 +53,10 @@ h1 {
     margin-top: 1rem;
 }
 
-/* Content Sections */
+/* Sections */
 section {
     width: 100%;
-    max-width: 800px;
+    max-width: 900px;
     padding: 100px 20px;
     border-top: 1px solid var(--border);
 }
@@ -65,12 +64,13 @@ section {
 h2 {
     font-family: 'Cinzel', serif;
     font-size: 1.4rem;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.25rem;
     text-transform: uppercase;
-    margin-bottom: 40px;
-    color: var(--primary);
+    margin-bottom: 60px;
+    text-align: center;
 }
 
+/* About */
 .mandate-text {
     font-size: 1.1rem;
     color: var(--accent);
@@ -79,57 +79,69 @@ h2 {
     padding-left: 30px;
 }
 
-/* Bullet Points Section */
-ul {
+/* Capabilities Desktop Layout */
+#capabilities ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-li {
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
+#capabilities li {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-li span.label {
+#capabilities .label {
     font-family: 'Cinzel', serif;
     font-size: 1rem;
-    color: var(--primary);
     width: 30%;
 }
 
-li span.desc {
+#capabilities .desc {
     font-size: 0.95rem;
     color: var(--accent);
     width: 65%;
 }
 
-/* Mobile Fix for List Layout */
+/* Premium Mobile Redesign */
 @media (max-width: 768px) {
-    li {
+
+    #capabilities {
+        text-align: center;
+    }
+
+    #capabilities li {
         flex-direction: column;
+        align-items: center;
+        border-bottom: none;
+        padding: 50px 0;
     }
 
-    li span.label,
-    li span.desc {
+    #capabilities .label {
         width: 100%;
+        margin-bottom: 15px;
+        font-size: 1.05rem;
+        letter-spacing: 0.1rem;
     }
 
-    li span.label {
-        margin-bottom: 10px;
+    #capabilities .desc {
+        width: 100%;
+        max-width: 500px;
+        font-size: 0.95rem;
+        line-height: 1.9;
     }
 }
 
-/* Contact Section */
+/* Contact */
 .contact-info {
-    margin-top: 20px;
+    text-align: center;
 }
 
 .contact-item {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .contact-label {
@@ -139,6 +151,7 @@ li span.desc {
     display: block;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
+    margin-bottom: 5px;
 }
 
 footer {
@@ -147,6 +160,7 @@ footer {
     letter-spacing: 0.1rem;
     color: #444;
     text-transform: uppercase;
+    text-align: center;
 }
 </style>
 </head>
@@ -161,7 +175,7 @@ footer {
 <section id="about">
     <h2>About Us</h2>
     <div class="mandate-text">
-        We help small to mid-sized businesses keep their books clean, their taxes compliant, and their financial data accurate. No fluff—just solid, reliable work.
+        We help small to mid-sized businesses keep their books clean, their taxes compliant, and their financial data accurate. No fluff—just disciplined, reliable execution.
     </div>
 </section>
 
@@ -170,23 +184,23 @@ footer {
     <ul>
         <li>
             <span class="label">Accounting & Bookkeeping</span>
-            <span class="desc">Monthly Bookkeeping, Bank Reconciliation, Trial Balance & Profit & Loss Account Preparation, Balance Sheet, Accounts Finalization.</span>
+            <span class="desc">Monthly bookkeeping, bank reconciliation, trial balance, profit & loss preparation, balance sheet, and accounts finalization.</span>
         </li>
         <li>
             <span class="label">Income Tax Services</span>
-            <span class="desc">Income Tax Return Filing, Tax Computation, Advance Tax Working.</span>
+            <span class="desc">Income tax return filing, tax computation, and advance tax planning.</span>
         </li>
         <li>
             <span class="label">GST Compliance</span>
-            <span class="desc">GST Registration, GST Return Filing, GST Annual Return.</span>
+            <span class="desc">GST registration, return filing, and annual compliance management.</span>
         </li>
         <li>
             <span class="label">Business Support Services</span>
-            <span class="desc">MSME Registration, DSC, Trade Licence, Professional Tax, Food Licence, Udyam Aadhaar Certificate.</span>
+            <span class="desc">MSME registration, trade licence, professional tax, food licence, and Udyam Aadhaar certification.</span>
         </li>
         <li>
-            <span class="label">Misc. Works</span>
-            <span class="desc">Property Tax Payment, Projected Profit & Loss & Balance Sheet for Home & Vehicle Loans.</span>
+            <span class="label">Miscellaneous Works</span>
+            <span class="desc">Property tax payments and projected financial statements for home and vehicle loan applications.</span>
         </li>
     </ul>
 </section>
