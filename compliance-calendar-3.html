@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance Calendar — AY 2026-27 | Archon Assurance</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
+
+:root {
+    --bg:     #0a0a0a;
+    --primary:#e0e0e0;
+    --accent: #a5a5a5;
+    --border: #222222;
+    --gold:   #c9a44c;
+    --blue:   #4a88c9;
+    --teal:   #4aad9a;
+    --red:    #c96a4a;
+}
+
+body {
+    background: radial-gradient(circle at top, #111111 0%, #0a0a0a 60%);
+    color: var(--primary);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.8;
+}
+
+/* ===== CANVAS ===== */
+#sine-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ===== TOP NAV ===== */
+.top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 36px;
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+}
+
+.back-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.back-link:hover { color: var(--primary); }
+
+.nav-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.18rem;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+/* ===== PAGE WRAPPER ===== */
+.page {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 130px 28px 100px;
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+    text-align: center;
+    padding-bottom: 72px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 80px;
+}
+
+.ay-badge {
+    font-size: 0.72rem;
+    letter-spacing: 0.25rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+
+.page-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    letter-spacing: 0.25rem;
+    text-transform: uppercase;
+    margin: 0 0 16px;
+}
+
+.page-header p {
+    color: var(--accent);
+    max-width: 540px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+}
+
+/* ===== SECTION ===== */
+.cal-section {
+    margin-bottom: 80px;
+}
+
+.cal-section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2rem;
+    text-transform: uppercase;
+    margin: 0 0 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+}
+
+/* ===== UPCOMING CARDS ===== */
+.upcoming-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 14px;
+}
+
+.up-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.up-card:hover            { background: rgba(255,255,255,0.02); }
+.up-card.card-urgent      { border-color: var(--red); }
+.up-card.card-today       { border-color: var(--gold); background: rgba(201,164,76,0.04); }
+
+.up-cat {
+    font-size: 0.68rem;
+    letter-spacing: 0.14rem;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.cat-gst { background: rgba(201,164,76,0.14); color: var(--gold); }
+.cat-it  { background: rgba(74,136,201,0.14); color: var(--blue); }
+.cat-tds { background: rgba(74,173,154,0.14); color: var(--teal); }
+
+.up-label {
+    font-weight: 600;
+    font-size: 0.93rem;
+    margin-bottom: 8px;
+    color: var(--primary);
+}
+
+.up-date {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--accent);
+    margin-bottom: 10px;
+}
+
+.up-count {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04rem;
+}
+
+.day-today  { color: var(--gold); }
+.day-urgent { color: var(--red); }
+.day-soon   { color: #d4a44c; }
+.day-normal { color: var(--accent); }
+
+/* ===== MONTHLY CARDS ===== */
+.monthly-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+}
+
+.m-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 22px 24px;
+    transition: border-color 0.3s, background 0.3s;
+}
+.m-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.015); }
+
+.m-day {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 12px;
+}
+
+.m-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: var(--primary);
+}
+
+.m-note { font-size: 0.82rem; color: var(--accent); }
+
+/* ===== TABLES ===== */
+.cal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.cal-table th,
+.cal-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.cal-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12rem;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.cal-table td:first-child {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.cal-table td:not(:first-child) { color: var(--accent); }
+
+.cal-table tr:last-child td { border-bottom: none; }
+.cal-table tr:hover td { background: rgba(255,255,255,0.015); }
+
+.d-gold  { color: var(--gold)  !important; font-weight: 600; }
+.d-today { color: var(--gold)  !important; font-weight: 700; }
+.d-white { color: var(--primary) !important; font-weight: 600; }
+
+.note {
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-top: 12px;
+    opacity: 0.8;
+}
+
+/* ===== CONTACT CARD ===== */
+.contact-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+}
+
+.c-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin: 20px 0 6px;
+}
+
+.c-label:first-child { margin-top: 0; }
+
+.contact-card a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.contact-card a:hover { color: #fff; }
+
+/* ===== REVEAL ===== */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== FOOTER ===== */
+.cal-footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 0.68rem;
+    letter-spacing: 0.1rem;
+    color: #444;
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+    .top-nav  { padding: 14px 20px; }
+    .nav-title { display: none; }
+    .page { padding: 100px 16px 60px; }
+    .cal-table th, .cal-table td { padding: 10px 8px; font-size: 0.82rem; }
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="sine-canvas"></canvas>
+
+<nav class="top-nav">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <span class="nav-title">Compliance Calendar</span>
+</nav>
+
+<div class="page">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header reveal">
+        <div class="ay-badge">Assessment Year 2026 – 27</div>
+        <h1>Compliance Calendar</h1>
+        <p>Track statutory due dates across GST, Income Tax, and TDS. All dates reflect AY 2026-27 deadlines.</p>
+    </div>
+
+    <!-- UPCOMING DEADLINES (populated by JS) -->
+    <div class="cal-section">
+        <h2 class="reveal">Upcoming Deadlines</h2>
+        <div id="upcoming-list" class="upcoming-grid"></div>
+    </div>
+
+    <!-- MONTHLY GST -->
+    <div class="cal-section reveal">
+        <h2>Monthly GST Filings</h2>
+        <div class="monthly-grid">
+            <div class="m-card">
+                <div class="m-day">11<sup style="font-size:1rem">th</sup></div>
+                <div class="m-name">GSTR-1</div>
+                <div class="m-note">Monthly outward supplies return</div>
+            </div>
+            <div class="m-card">
+                <div class="m-day">20<sup style="font-size:1rem">th</sup></div>
+                <div class="m-name">GSTR-3B</div>
+                <div class="m-note">Monthly summary return &amp; tax payment</div>
+            </div>
+            <div class="m-card">
+                <div class="m-day">13<sup style="font-size:1rem">th</sup></div>
+                <div class="m-name">GSTR-1 (QRMP)</div>
+                <div class="m-note">Quarterly filers — quarterly return</div>
+            </div>
+            <div class="m-card">
+                <div class="m-day">18<sup style="font-size:1rem">th</sup></div>
+                <div class="m-name">CMP-08</div>
+                <div class="m-note">Composition scheme — quarterly payment</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INCOME TAX AY 2026-27 -->
+    <div class="cal-section reveal">
+        <h2>Income Tax — AY 2026-27</h2>
+        <table class="cal-table">
+            <thead>
+                <tr>
+                    <th>Compliance</th>
+                    <th>Due Date</th>
+                    <th>Applicable To</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Advance Tax — Q1</td>
+                    <td><span class="d-white">15 June 2026</span></td>
+                    <td>Taxpayers with liability &gt; ₹10,000</td>
+                </tr>
+                <tr>
+                    <td>ITR Filing — Non-Audit</td>
+                    <td><span class="d-today">31 July 2026</span></td>
+                    <td>Individuals, HUF, firms not subject to audit</td>
+                </tr>
+                <tr>
+                    <td>Advance Tax — Q2</td>
+                    <td><span class="d-gold">15 September 2026</span></td>
+                    <td>All advance tax payers</td>
+                </tr>
+                <tr>
+                    <td>ITR Filing — Audit Cases</td>
+                    <td><span class="d-gold">31 October 2026</span></td>
+                    <td>Companies &amp; firms subject to audit</td>
+                </tr>
+                <tr>
+                    <td>ITR Filing — Transfer Pricing</td>
+                    <td><span class="d-gold">30 November 2026</span></td>
+                    <td>Entities with international transactions</td>
+                </tr>
+                <tr>
+                    <td>Advance Tax — Q3</td>
+                    <td><span class="d-gold">15 December 2026</span></td>
+                    <td>All advance tax payers</td>
+                </tr>
+                <tr>
+                    <td>Belated / Revised ITR</td>
+                    <td><span class="d-gold">31 December 2026</span></td>
+                    <td>Missed original deadline</td>
+                </tr>
+                <tr>
+                    <td>Advance Tax — Q4 (Final)</td>
+                    <td><span class="d-gold">15 March 2027</span></td>
+                    <td>All advance tax payers</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- TDS -->
+    <div class="cal-section reveal">
+        <h2>TDS Returns — FY 2026-27</h2>
+        <table class="cal-table">
+            <thead>
+                <tr>
+                    <th>Quarter</th>
+                    <th>Period</th>
+                    <th>Return Due</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Q1</td>
+                    <td>April – June 2026</td>
+                    <td><span class="d-today">31 July 2026</span></td>
+                </tr>
+                <tr>
+                    <td>Q2</td>
+                    <td>July – September 2026</td>
+                    <td><span class="d-gold">31 October 2026</span></td>
+                </tr>
+                <tr>
+                    <td>Q3</td>
+                    <td>October – December 2026</td>
+                    <td><span class="d-gold">31 January 2027</span></td>
+                </tr>
+                <tr>
+                    <td>Q4</td>
+                    <td>January – March 2027</td>
+                    <td><span class="d-gold">31 May 2027</span></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="note">* Monthly TDS payment: 7th of the following month (30th April for March deductions).</p>
+    </div>
+
+    <!-- GST ANNUAL -->
+    <div class="cal-section reveal">
+        <h2>GST Annual Compliance</h2>
+        <table class="cal-table">
+            <thead>
+                <tr>
+                    <th>Form</th>
+                    <th>Due Date</th>
+                    <th>Applicable To</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GSTR-9 Annual Return</td>
+                    <td><span class="d-gold">31 December 2026</span></td>
+                    <td>Regular taxpayers (turnover &gt; ₹2 Cr)</td>
+                </tr>
+                <tr>
+                    <td>GSTR-9C Reconciliation</td>
+                    <td><span class="d-gold">31 December 2026</span></td>
+                    <td>Taxpayers with turnover &gt; ₹5 Cr</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="cal-section reveal">
+        <h2>Need Assistance?</h2>
+        <div class="contact-card">
+            <span class="c-label">Email</span>
+            <a href="mailto:archonassurance.services@gmail.com">archonassurance.services@gmail.com</a>
+            <span class="c-label">Call</span>
+            <a href="tel:+919748360695">+91 9748360695</a> &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="tel:+916289161375">+91 6289161375</a>
+            <span class="c-label">WhatsApp</span>
+            <a href="https://wa.me/916289161375" target="_blank" rel="noopener">Chat on WhatsApp →</a>
+        </div>
+    </div>
+
+</div>
+
+<footer class="cal-footer">
+    Archon Assurance — Advisory &amp; Compliance &nbsp;|&nbsp;
+    Dates are indicative; verify official government notifications for extensions.
+</footer>
+
+<script>
+/* ================================================================
+   SINE WAVE BACKGROUND
+   ================================================================ */
+(function () {
+    var cv = document.getElementById('sine-canvas');
+    var ctx = cv.getContext('2d');
+    var sy = 0, waves = [];
+    var PAL = [
+        {col:'180,140,55',op:.07},{col:'28,90,150',op:.08},
+        {col:'40,100,90',op:.07},{col:'155,120,42',op:.06},
+        {col:'22,75,128',op:.07},{col:'35,88,80',op:.06},
+        {col:'165,130,48',op:.08}
+    ];
+
+    function init() {
+        cv.width  = window.innerWidth;
+        cv.height = window.innerHeight;
+        waves = PAL.map(function (p, i) {
+            return {
+                col: p.col, op: p.op,
+                yf: 0.06 + (i / (PAL.length - 1)) * 0.86,
+                amp:  16 + Math.random() * 44,
+                freq: 0.005 + Math.random() * 0.009,
+                sp:   0.16  + Math.random() * 0.44,
+                ph:   Math.random() * Math.PI * 2
+            };
+        });
+    }
+
+    function draw() {
+        var W = cv.width, H = cv.height, t = Date.now() / 1000, off = sy * 0.07;
+        ctx.clearRect(0, 0, W, H);
+        waves.forEach(function (w) {
+            var wy = w.yf * H - off;
+            ctx.strokeStyle = 'rgba(' + w.col + ',' + w.op + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (var x = 0; x <= W; x += 3) {
+                var y = wy + w.amp * Math.sin(x * w.freq + t * w.sp + w.ph);
+                x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        });
+        requestAnimationFrame(draw);
+    }
+
+    var rt;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(init, 150); });
+    window.addEventListener('scroll', function () { sy = window.scrollY || window.pageYOffset; }, {passive:true});
+    init(); draw();
+}());
+
+/* ================================================================
+   UPCOMING DEADLINES — auto-sorted from today
+   ================================================================ */
+(function () {
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    /* Fixed one-time deadlines for AY 2026-27 */
+    var fixed = [
+        {label:'Advance Tax — Q1',         cat:'it',  date:new Date(2026, 5,15)},
+        {label:'ITR Filing (Non-Audit)',    cat:'it',  date:new Date(2026, 6,31)},
+        {label:'TDS Return — Q1',           cat:'tds', date:new Date(2026, 6,31)},
+        {label:'Advance Tax — Q2',          cat:'it',  date:new Date(2026, 8,15)},
+        {label:'ITR Filing (Audit Cases)',  cat:'it',  date:new Date(2026, 9,31)},
+        {label:'TDS Return — Q2',           cat:'tds', date:new Date(2026, 9,31)},
+        {label:'ITR (Transfer Pricing)',    cat:'it',  date:new Date(2026,10,30)},
+        {label:'Advance Tax — Q3',          cat:'it',  date:new Date(2026,11,15)},
+        {label:'Belated / Revised ITR',     cat:'it',  date:new Date(2026,11,31)},
+        {label:'GSTR-9 Annual Return',      cat:'gst', date:new Date(2026,11,31)},
+        {label:'TDS Return — Q3',           cat:'tds', date:new Date(2027, 0,31)},
+        {label:'Advance Tax — Q4 (Final)',  cat:'it',  date:new Date(2027, 2,15)},
+        {label:'TDS Return — Q4',           cat:'tds', date:new Date(2027, 4,31)}
+    ];
+
+    /* Recurring monthly GST for next 6 months */
+    var rec = [];
+    for (var m = 0; m < 7; m++) {
+        var ref = new Date(today.getFullYear(), today.getMonth() + m, 1);
+        var yr  = ref.getFullYear(), mo = ref.getMonth();
+        var g1  = new Date(yr, mo, 11);
+        var g3  = new Date(yr, mo, 20);
+        if (g1 >= today) rec.push({label:'GSTR-1 (Monthly)',  cat:'gst', date:g1});
+        if (g3 >= today) rec.push({label:'GSTR-3B (Monthly)', cat:'gst', date:g3});
+    }
+
+    /* Merge, keep only today-onward, sort ascending */
+    var all = fixed.concat(rec).filter(function (d) { return d.date >= today; });
+    all.sort(function (a, b) { return a.date - b.date; });
+
+    var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var CAT = {gst:'GST', it:'Income Tax', tds:'TDS'};
+
+    function fmt(d) { return d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear(); }
+    function diff(d) { return Math.round((d - today) / 86400000); }
+
+    var container = document.getElementById('upcoming-list');
+
+    all.slice(0, 6).forEach(function (item, idx) {
+        var days = diff(item.date);
+        var urgency = days === 0 ? 'today' : days <= 7 ? 'urgent' : days <= 30 ? 'soon' : 'normal';
+        var countTxt = days === 0 ? '— Due Today' : days === 1 ? '— Tomorrow' : '— In ' + days + ' days';
+
+        var card = document.createElement('div');
+        card.className = 'up-card reveal' +
+            (urgency === 'today'  ? ' card-today'  : '') +
+            (urgency === 'urgent' ? ' card-urgent' : '');
+        card.style.transitionDelay = (idx * 0.08) + 's';
+
+        card.innerHTML =
+            '<span class="up-cat cat-' + item.cat + '">' + CAT[item.cat] + '</span>' +
+            '<div class="up-label">' + item.label + '</div>' +
+            '<div class="up-date">' + fmt(item.date) + '</div>' +
+            '<div class="up-count day-' + urgency + '">' + countTxt + '</div>';
+
+        container.appendChild(card);
+    });
+
+    /* ---- SCROLL REVEAL ---- */
+    if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+        return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); }
+        });
+    }, {threshold: 0.1, rootMargin: '0px 0px -20px 0px'});
+
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+
+</body>
+</html>
